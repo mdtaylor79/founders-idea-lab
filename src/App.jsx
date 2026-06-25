@@ -38,13 +38,13 @@ const MARKETS = [
 const AUDIENCES = ["Kids my age", "Students", "Parents", "Grandparents", "Small businesses", "Local shops", "Athletes", "Teachers", "Gamers", "My community"];
 
 const MONEY_MODELS = [
-  { name: "Subscription", desc: "People pay every month to keep using it.", ex: "A study app for $3 a month." },
-  { name: "Freemium", desc: "Free basic version, pay for the extras.", ex: "Free game, pay for new skins." },
-  { name: "Ads", desc: "Free to use, brands pay to show ads.", ex: "A free app with short ads." },
-  { name: "Marketplace fee", desc: "Connect buyers and sellers, take a small cut.", ex: "A resale app keeps 5% of each sale." },
-  { name: "One-time sale", desc: "Pay once to own it.", ex: "A $5 app or a physical product." },
-  { name: "Pay-per-use", desc: "Pay only when you use it.", ex: "Pay per ride or per print." },
-  { name: "Sponsorship", desc: "A company funds you to reach your audience.", ex: "A brand sponsors your video series." },
+  { name: "Subscription", desc: "People pay every month to keep using it.", ex: "A study app for $3 a month.", bestFor: "Best for tools people use again and again." },
+  { name: "Freemium", desc: "Free basic version, pay for the extras.", ex: "Free game, pay for new skins.", bestFor: "Best for products that grow by letting many people try free." },
+  { name: "Ads", desc: "Free to use, brands pay to show ads.", ex: "A free app with short ads.", bestFor: "Best for free apps with a large audience." },
+  { name: "Marketplace fee", desc: "Connect buyers and sellers, take a small cut.", ex: "A resale app keeps 5% of each sale.", bestFor: "Best for connecting two groups, like buyers and sellers." },
+  { name: "One-time sale", desc: "Pay once to own it.", ex: "A $5 app or a physical product.", bestFor: "Best for a finished product someone buys once." },
+  { name: "Pay-per-use", desc: "Pay only when you use it.", ex: "Pay per ride or per print.", bestFor: "Best for services people use now and then, not daily." },
+  { name: "Sponsorship", desc: "A company funds you to reach your audience.", ex: "A brand sponsors your video series.", bestFor: "Best for creators and events with a clear audience." },
 ];
 const MODEL_CHIPS = MONEY_MODELS.map((m) => m.name);
 
@@ -374,9 +374,12 @@ function BuildLab() {
 
 function Money() {
   const [idea, setIdea] = useState("");
+  const [open, setOpen] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [out, setOut] = useState(null);
+
+  const useModel = (name) => setIdea((p) => p.indexOf(name) !== -1 ? p : (p ? p + " " : "") + "Using a " + name + " model. ");
 
   async function run() {
     setLoading(true); setError(false); setOut(null);
@@ -391,16 +394,29 @@ function Money() {
 
   return (
     <div>
-      <StationHeader n={4} title="Money Models" sub="A real venture has a plan to make money. Learn the common models, then get one matched to your idea." />
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-6">
-        {MONEY_MODELS.map((m) => (
-          <div key={m.name} style={{ backgroundColor: C.white, borderColor: C.line }} className="lift rounded-xl border p-4 shadow-sm">
-            <div style={{ color: C.navy }} className="font-bold mb-1">{m.name}</div>
-            <div style={{ color: C.ink }} className="text-sm mb-2">{m.desc}</div>
-            <div style={{ color: C.green }} className="text-xs italic">{m.ex}</div>
-          </div>
-        ))}
+      <StationHeader n={4} title="Money Models" sub="A real venture has a plan to make money. Tap a card to see when to use that model, then get one matched to your idea." />
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-3">
+        {MONEY_MODELS.map((m, i) => {
+          const isOpen = open === i;
+          return (
+            <div key={m.name} onClick={() => setOpen(isOpen ? null : i)} style={{ backgroundColor: C.white, borderColor: isOpen ? C.green : C.line }} className="btn rounded-xl border p-4 shadow-sm cursor-pointer">
+              <div className="flex items-center justify-between">
+                <span style={{ color: C.navy }} className="font-bold">{m.name}</span>
+                <span style={{ color: C.green, display: "inline-block", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform .15s ease" }} className="font-black">{"\u203A"}</span>
+              </div>
+              <div style={{ color: C.ink }} className="text-sm mt-1">{m.desc}</div>
+              <div style={{ color: C.green }} className="text-xs italic mt-1">{m.ex}</div>
+              {isOpen && (
+                <div style={{ borderColor: C.line }} className="border-t mt-3 pt-3 fade-in">
+                  <div style={{ color: C.sub }} className="text-sm mb-2">{m.bestFor}</div>
+                  <span onClick={(e) => { e.stopPropagation(); useModel(m.name); }} style={{ color: C.green }} className="text-xs font-bold underline">Use this in my idea</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
+      <div style={{ color: C.sub }} className="text-xs mb-6">Tip: tap any card to see when to use that model.</div>
       <div style={{ color: C.navy }} className="font-bold text-sm mb-2">Match a model to your idea</div>
       <textarea value={idea} onChange={(e) => setIdea(e.target.value)} rows={2} placeholder="An app that helps students study from their notes..." style={{ borderColor: C.line, color: C.ink }} className="field w-full rounded-md border-2 p-3 text-sm mb-3" />
       <PrimaryButton onClick={run} disabled={!idea.trim() || loading}>Suggest money models</PrimaryButton>
