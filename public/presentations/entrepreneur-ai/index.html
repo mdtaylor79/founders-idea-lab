@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entrepreneurs &amp; AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#00853E; --deep:#00472A; --lime:#C4D600; --blue:#00AEEF;
+    --paper:#f5f8f5; --white:#ffffff; --ink:#16231c; --sub:#5c6b62; --line:#e0e8e2;
+    --display:'EB Garamond', Georgia, serif;
+    --body:'Helvetica Neue', Arial, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ font-family:var(--body); color:var(--ink); background:#0a140e; overflow:hidden; }
+
+  .deck{ position:fixed; inset:0; }
+
+  .slide{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:6vh 8vw;
+    background:var(--paper);
+    opacity:0; visibility:hidden;
+    transition:opacity .45s ease;
+  }
+  .slide.active{ opacity:1; visibility:visible; }
+  .slide.dark{ background:var(--deep); color:var(--white); }
+
+  .wrap{ max-width:1000px; width:100%; margin:0 auto; }
+  .slide.active .wrap{ animation:rise .5s ease both; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:none;} }
+
+  .eyebrow{
+    font-size:clamp(.72rem,1.4vw,.95rem); font-weight:700;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--green);
+    margin-bottom:1.1rem;
+  }
+  .slide.dark .eyebrow{ color:var(--lime); }
+
+  .rule{ height:5px; width:74px; border-radius:5px;
+    background:linear-gradient(90deg, var(--blue), var(--green)); margin:0 0 1.6rem; }
+  .slide.dark .rule{ background:linear-gradient(90deg, var(--blue), var(--lime)); }
+
+  h1{ font-family:var(--display); font-weight:700; line-height:1.04;
+    font-size:clamp(2.6rem,7.5vw,5.6rem); letter-spacing:-.01em; }
+  h2{ font-family:var(--display); font-weight:700; line-height:1.08;
+    font-size:clamp(2rem,5.2vw,3.7rem); color:var(--deep); margin-bottom:1.3rem; }
+  .slide.dark h2{ color:var(--white); }
+
+  p.lead{ font-size:clamp(1.1rem,2.4vw,1.65rem); line-height:1.5; color:var(--sub); max-width:46ch; }
+  .slide.dark p.lead{ color:#cfe8d6; }
+  .big{ font-family:var(--display); font-weight:600; font-size:clamp(1.6rem,4vw,3rem);
+    line-height:1.18; color:var(--deep); margin-top:.4rem; }
+  .slide.dark .big{ color:var(--white); }
+  .accent{ color:var(--green); }
+  .slide.dark .accent{ color:var(--lime); }
+
+  .titlesub{ font-size:clamp(1.1rem,2.4vw,1.6rem); color:#cfe8d6; margin-top:1.6rem; max-width:42ch; line-height:1.5; }
+  .tag{ margin-top:2.6rem; font-size:.85rem; letter-spacing:.14em; text-transform:uppercase; color:var(--lime); font-weight:700; }
+
+  ul.points{ list-style:none; margin-top:.5rem; display:grid; gap:1rem; }
+  ul.points li{ display:flex; gap:.85rem; align-items:flex-start;
+    font-size:clamp(1.05rem,2.2vw,1.5rem); line-height:1.4; }
+  ul.points li::before{ content:""; width:11px; height:11px; border-radius:3px;
+    background:var(--green); margin-top:.55rem; flex:0 0 auto; }
+  .slide.dark ul.points li::before{ background:var(--lime); }
+
+  .grid{ display:grid; gap:1rem; margin-top:.4rem; }
+  .grid.three{ grid-template-columns:repeat(3,1fr); }
+  .grid.two{ grid-template-columns:repeat(2,1fr); }
+  @media (max-width:760px){ .grid.three,.grid.two{ grid-template-columns:1fr; } }
+
+  .card{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:1.4rem 1.4rem; }
+  .slide.dark .card{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); }
+  .card .num{ font-family:var(--display); font-weight:700; font-size:1.7rem; color:var(--lime); line-height:1; }
+  .card .ct{ font-weight:700; color:var(--deep); margin:.5rem 0 .35rem; font-size:1.15rem; }
+  .slide.dark .card .ct{ color:var(--white); }
+  .card .cd{ color:var(--sub); font-size:.98rem; line-height:1.45; }
+  .slide.dark .card .cd{ color:#cfe8d6; }
+  .card .ex{ color:var(--green); font-style:italic; font-size:.92rem; margin-top:.5rem; }
+  .slide.dark .card .ex{ color:var(--lime); }
+
+  .path{ display:grid; gap:.7rem; margin-top:.4rem; }
+  .path .row{ display:flex; gap:1rem; align-items:baseline;
+    border-bottom:1px solid var(--line); padding-bottom:.7rem; }
+  .path .row:last-child{ border-bottom:none; }
+  .path .n{ font-family:var(--display); font-weight:700; color:var(--green); width:1.6em; font-size:1.4rem; flex:0 0 auto; }
+  .path .nm{ font-weight:700; color:var(--deep); width:9.5em; flex:0 0 auto; font-size:1.1rem; }
+  .path .ds{ color:var(--sub); font-size:1.02rem; }
+  @media (max-width:760px){ .path .nm{ width:auto; } .path .row{ flex-wrap:wrap; gap:.3rem 1rem; } }
+
+  .cta{ display:inline-block; margin-top:2rem; background:var(--lime); color:var(--deep);
+    font-weight:700; font-size:1.15rem; text-decoration:none; padding:.95rem 2.2rem;
+    border-radius:10px; transition:filter .15s ease, transform .08s ease; }
+  .cta:hover{ filter:brightness(.95); }
+  .cta:active{ transform:scale(.98); }
+
+  /* progress + chrome */
+  #bar{ position:fixed; top:0; left:0; height:5px; width:0;
+    background:linear-gradient(90deg, var(--blue), var(--green)); z-index:30; transition:width .35s ease; }
+  .chrome{ position:fixed; bottom:22px; left:0; right:0; z-index:30;
+    display:flex; align-items:center; justify-content:center; gap:14px; pointer-events:none; }
+  .chrome button{ pointer-events:auto; font-family:var(--body); font-weight:700; font-size:.9rem;
+    border:1px solid var(--line); background:var(--white); color:var(--deep);
+    padding:.55rem 1.1rem; border-radius:8px; cursor:pointer; transition:filter .15s ease; }
+  .slide.dark ~ .chrome button{ } /* no-op */
+  .chrome button:hover{ filter:brightness(.96); }
+  #counter{ position:fixed; bottom:26px; right:26px; z-index:30; font-size:.82rem;
+    font-weight:700; letter-spacing:.12em; color:var(--sub); }
+  #fsbtn{ position:fixed; top:18px; right:22px; z-index:30; font-family:var(--body);
+    font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    border:1px solid var(--line); background:rgba(255,255,255,.85); color:var(--deep);
+    padding:.45rem .9rem; border-radius:8px; cursor:pointer; }
+
+  @media (prefers-reduced-motion: reduce){
+    .slide{ transition:none; } .slide.active .wrap{ animation:none; } #bar{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<button id="fsbtn" onclick="fs()">Fullscreen</button>
+
+<div class="deck">
+
+  <!-- 1: Title -->
+  <section class="slide dark active">
+    <div class="wrap">
+      <div class="eyebrow">UNT Frisco &middot; Digital Health Pioneer Camp 2026</div>
+      <h1>Entrepreneurs<br>&amp; AI</h1>
+      <p class="titlesub">Before we build in the Idea Lab, let us get the mindset right.</p>
+      <div class="tag">Prerequisite session</div>
+    </div>
+  </section>
+
+  <!-- 2: What is an entrepreneur -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The basics</div>
+      <div class="rule"></div>
+      <h2>What is an entrepreneur?</h2>
+      <p class="lead">A person who finds a problem people care about and builds a solution they value.</p>
+      <p class="big" style="margin-top:1.6rem;">You do not need age, money, or permission. <span class="accent">You need a problem worth solving.</span></p>
+    </div>
+  </section>
+
+  <!-- 3: Start with a problem -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The first move</div>
+      <div class="rule"></div>
+      <h2>Start with a problem, not a product</h2>
+      <div class="grid three">
+        <div class="card"><div class="num">1</div><div class="ct">Notice</div><div class="cd">Watch for the small frustrations people put up with every day.</div></div>
+        <div class="card"><div class="num">2</div><div class="ct">Ask who hurts</div><div class="cd">Name the person who feels the problem most.</div></div>
+        <div class="card"><div class="num">3</div><div class="ct">Then build</div><div class="cd">Shape the simplest thing that helps that person.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: What is AI (dark emphasis) -->
+  <section class="slide dark">
+    <div class="wrap">
+      <div class="eyebrow">The tool</div>
+      <div class="rule"></div>
+      <h2>What is AI?</h2>
+      <p class="lead">A tool that helps you think, make, and build faster.</p>
+      <p class="big" style="margin-top:1.6rem;">AI refines. It does not replace. <span class="accent">You are still the founder.</span></p>
+    </div>
+  </section>
+
+  <!-- 5: How founders use AI -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Leverage</div>
+      <div class="rule"></div>
+      <h2>How founders use AI</h2>
+      <ul class="points">
+        <li>Find opportunities and spot real problems</li>
+        <li>Research a market in minutes, not weeks</li>
+        <li>Draft ideas, names, and designs</li>
+        <li>Get fast, honest feedback on a plan</li>
+        <li>Sharpen a pitch before facing an investor</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6: The path (maps to lab) -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">What you will do today</div>
+      <div class="rule"></div>
+      <h2>The path you will walk</h2>
+      <div class="path">
+        <div class="row"><span class="n">1</span><span class="nm">Opportunity</span><span class="ds">Pick a market and find a problem worth solving.</span></div>
+        <div class="row"><span class="n">2</span><span class="nm">Sparks</span><span class="ds">Turn the problem into three startup ideas.</span></div>
+        <div class="row"><span class="n">3</span><span class="nm">Build</span><span class="ds">Shape a venture and pitch it to an AI investor.</span></div>
+        <div class="row"><span class="n">4</span><span class="nm">Money</span><span class="ds">Decide how the business will earn.</span></div>
+        <div class="row"><span class="n">5</span><span class="nm">Remix</span><span class="ds">Mash a technology with a goal for fresh ideas.</span></div>
+        <div class="row"><span class="n">6</span><span class="nm">Prompt</span><span class="ds">Learn to ask AI for better answers.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7: How a business makes money -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The business part</div>
+      <div class="rule"></div>
+      <h2>A real venture makes money</h2>
+      <div class="grid two">
+        <div class="card"><div class="ct">Subscription</div><div class="cd">People pay every month to keep using it.</div><div class="ex">A study app for a few dollars a month.</div></div>
+        <div class="card"><div class="ct">Freemium</div><div class="cd">Free to start, pay for the extras.</div><div class="ex">A free game that sells new skins.</div></div>
+        <div class="card"><div class="ct">Marketplace fee</div><div class="cd">Connect buyers and sellers, take a small cut.</div><div class="ex">A resale app that keeps a slice of each sale.</div></div>
+        <div class="card"><div class="ct">One-time sale</div><div class="cd">Pay once to own it.</div><div class="ex">A product or an app you buy outright.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8: Prompting (dark) -->
+  <section class="slide dark">
+    <div class="wrap">
+      <div class="eyebrow">Working with AI</div>
+      <div class="rule"></div>
+      <h2>Talk to AI like a founder</h2>
+      <div class="grid two">
+        <div class="card"><div class="ct">Role</div><div class="cd">Tell the AI who to be.</div><div class="ex">Act like a startup coach for teens.</div></div>
+        <div class="card"><div class="ct">Goal</div><div class="cd">Say what you want.</div><div class="ex">Give me 3 app ideas for better sleep.</div></div>
+        <div class="card"><div class="ct">Details</div><div class="cd">Add who and where.</div><div class="ex">For high school athletes who stay up late.</div></div>
+        <div class="card"><div class="ct">Format</div><div class="cd">Say how to show it.</div><div class="ex">List each with a name and one line.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9: Mindset -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The mindset</div>
+      <div class="rule"></div>
+      <h2>Founders are made</h2>
+      <ul class="points">
+        <li>Notice the problems other people ignore</li>
+        <li>Build before you feel ready</li>
+        <li>Use AI as leverage, not a crutch</li>
+        <li>Carry it with character and discipline</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10: CTA (dark) -->
+  <section class="slide dark">
+    <div class="wrap">
+      <div class="eyebrow">Your turn</div>
+      <div class="rule"></div>
+      <h2>Now let us build</h2>
+      <p class="lead">Open the Founder's Idea Lab and turn what you notice into a venture.</p>
+      <a class="cta" href="https://founders-idea-lab.vercel.app" target="_blank" rel="noopener">Launch the Idea Lab</a>
+    </div>
+  </section>
+
+</div>
+
+<div class="chrome">
+  <button onclick="prev()">&larr; Back</button>
+  <button onclick="next()">Next &rarr;</button>
+</div>
+<div id="counter">01 / 10</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var i = 0;
+  function pad(x){ return x < 10 ? '0' + x : '' + x; }
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    for (var k = 0; k < slides.length; k++){ slides[k].classList.toggle('active', k === i); }
+    counter.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  }
+  function next(){ show(i + 1); }
+  function prev(){ show(i - 1); }
+  function fs(){
+    if (!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+    else { document.exitFullscreen(); }
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if (e.key === 'Home'){ show(0); }
+    else if (e.key === 'End'){ show(slides.length - 1); }
+  });
+  show(0);
+</script>
+</body>
+</html>
