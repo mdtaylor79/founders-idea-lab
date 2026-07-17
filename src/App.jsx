@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-// ---- UNT brand palette (from UNT Brand Reference Guide; CMYK mapped to digital hex) ----
+// ---- Maroon and gold palette ----
 const C = {
-  green: "#00853E",   // UNT Green (primary)
-  navy: "#00472A",    // deep UNT green (dark surfaces, headings)
-  teal: "#00853E",    // secondary green label
-  gold: "#C4D600",    // UNT chartreuse accent
-  blue: "#00AEEF",    // UNT bright blue accent
-  paper: "#f5f8f5",
+  green: "#8C1D2B",   // maroon (primary)
+  navy: "#5E1220",    // deep maroon (dark surfaces, headings)
+  teal: "#8C1D2B",    // maroon secondary label
+  gold: "#FFC72C",    // yellow gold accent
+  blue: "#C8971B",    // deep gold (gradient rule, accent borders)
+  paper: "#faf7f2",
   white: "#ffffff",
-  ink: "#16231c",
-  sub: "#5c6b62",
-  line: "#e0e8e2",
+  ink: "#241316",
+  sub: "#6b5b52",
+  line: "#ece2d8",
 };
 
 const DISPLAY = "'EB Garamond', Georgia, serif";
@@ -90,7 +90,7 @@ function GradientRule({ width }) {
 function PrimaryButton({ children, onClick, disabled, full }) {
   return (
     <button onClick={onClick} disabled={disabled}
-      style={{ backgroundColor: disabled ? "#9bc3a8" : C.green, color: C.white }}
+      style={{ backgroundColor: disabled ? "#c9a7ac" : C.green, color: C.white }}
       className={`btn px-6 py-3 rounded-md font-bold text-base shadow-sm disabled:cursor-not-allowed ${full ? "w-full" : ""}`}>
       {children}
     </button>
@@ -100,7 +100,7 @@ function PrimaryButton({ children, onClick, disabled, full }) {
 function LimeButton({ children, onClick, disabled }) {
   return (
     <button onClick={onClick} disabled={disabled}
-      style={{ backgroundColor: disabled ? "#e6efb0" : C.gold, color: C.navy }}
+      style={{ backgroundColor: disabled ? "#f0e2b0" : C.gold, color: C.navy }}
       className="btn px-6 py-3 rounded-md font-bold text-base shadow-sm disabled:cursor-not-allowed">
       {children}
     </button>
@@ -427,7 +427,7 @@ function Money() {
           <div className="fade-in"><Card>
             {(out.suggestions || []).map((s, i) => <Field key={i} label={s.model} value={s.whyItFits} color={C.teal} />)}
             {out.topPick && (
-              <div style={{ backgroundColor: "#eef7e6", borderColor: C.green }} className="rounded-md border-2 p-3 mt-2">
+              <div style={{ backgroundColor: "#fff6dd", borderColor: C.green }} className="rounded-md border-2 p-3 mt-2">
                 <span style={{ color: C.green }} className="text-[11px] font-bold uppercase tracking-wider">Best fit to start: </span>
                 <span style={{ color: C.ink }} className="text-sm font-semibold">{out.topPick}</span>
               </div>
@@ -528,7 +528,7 @@ function PromptPower() {
           <div style={{ color: "#a13030" }} className="text-[11px] font-bold uppercase tracking-wider mb-1">Weak prompt</div>
           <div style={{ color: C.ink }} className="text-sm italic">"Give me a business idea."</div>
         </div>
-        <div style={{ backgroundColor: "#eef7e6", borderColor: "#9fcf86" }} className="rounded-md border p-4">
+        <div style={{ backgroundColor: "#fff6dd", borderColor: "#e6c766" }} className="rounded-md border p-4">
           <div style={{ color: C.green }} className="text-[11px] font-bold uppercase tracking-wider mb-1">Strong prompt</div>
           <div style={{ color: C.ink }} className="text-sm italic">"Act like a startup coach for teens. Give me 3 fintech app ideas that help college students stop overspending. List each with a name and one line."</div>
         </div>
@@ -618,7 +618,7 @@ function Landing({ onLaunch }) {
           <div className="grid md:grid-cols-3 gap-5 mt-8">
             {quick.map(([n, t, d]) => (
               <div key={n} style={{ backgroundColor: C.paper, borderColor: C.line }} className="rounded-xl border p-6">
-                <div style={{ color: C.gold, fontFamily: DISPLAY }} className="text-4xl font-bold mb-2">{n}</div>
+                <div style={{ color: C.green, fontFamily: DISPLAY }} className="text-4xl font-bold mb-2">{n}</div>
                 <div style={{ color: C.navy }} className="font-bold text-lg mb-1">{t}</div>
                 <div style={{ color: C.sub }} className="text-sm leading-relaxed">{d}</div>
               </div>
@@ -659,14 +659,14 @@ function Landing({ onLaunch }) {
       <section style={{ backgroundColor: C.navy }} className="px-6 py-16">
         <div className="max-w-3xl mx-auto text-center">
           <h2 style={{ color: C.white, fontFamily: DISPLAY }} className="text-3xl md:text-4xl font-bold mb-4">Ready to build something?</h2>
-          <p style={{ color: "#cfe8d6" }} className="mb-7">Pick a problem you care about and see where it leads.</p>
+          <p style={{ color: "#f2e4c2" }} className="mb-7">Pick a problem you care about and see where it leads.</p>
           <button onClick={onLaunch} style={{ backgroundColor: C.gold, color: C.navy }} className="btn px-8 py-3.5 rounded-md font-bold text-base shadow-sm">Launch the Idea Lab</button>
         </div>
       </section>
 
       <footer style={{ backgroundColor: C.white, borderColor: C.line, color: C.sub }} className="border-t px-6 py-8">
         <div className="max-w-6xl mx-auto text-center text-xs">
-          <div className="mb-1">UNT Frisco, Digital Health Pioneer Camp 2026</div>
+          <div className="mb-1">Denton-Lewisville Guide Right Tools 2026</div>
           <div>AI refines, it does not replace. You are the founder.</div>
         </div>
       </footer>
